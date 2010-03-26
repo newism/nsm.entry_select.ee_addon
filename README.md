@@ -14,7 +14,13 @@ Let's say your custom field name is `my_entry_relationship`. In your templates y
 
 Example 1: Outputs the selected entry id's concatenated with a "|" ie: 1|2|3 Use this in `{exp:channel:entries}` tag `entry_id` parameter.
 
-	{my_entry_relationship}
+	<ul>
+		{exp:channel:entries
+			entry_id="{my_entry_relationship}"
+		}
+	    <li>{title}</li>
+		{/exp:channel:entries}
+	</ul>
 
 Example 2: Outputs the selected entry id's concatenated with a "," ie: 1,2,3 Use this in `{exp:query}` tag `WHERE entry_id IN()` conditional.
 
