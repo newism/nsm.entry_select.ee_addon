@@ -1,6 +1,8 @@
 NSM Entry Select
 ================
 
+Store a pipe delimited list of one or more selected entry ids as custom field content. Entry selections can be restricted by channels on a per field basis.
+
 Screenshots
 -----------
 
