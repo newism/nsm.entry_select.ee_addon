@@ -98,11 +98,7 @@ Note: Pulling custom data will require one or more small DB calls.
 
 The glue for the returned entry values. Default glue is a pipe.
 
-Example 1: Outputs the selected entry id's concatenated with a "|" ie: 1|2|3 Use this in embedded `{exp:channel:entries}` tag `entry_id` parameter.
-
-	{my_entry_relationship_field}
-
-Example 2: Outputs the selected entry id's concatenated with a "," ie: 1,2,3 Use this in `{exp:query}` tag `WHERE entry_id IN()` conditional.
+Example: Output the selected entry id's concatenated with a "," ie: `1,2,3`. Use this in `{exp:query}` tag `WHERE entry_id IN()` conditional like so:
 
 	<ul>
 	{exp:query sql="
