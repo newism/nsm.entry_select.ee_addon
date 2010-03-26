@@ -54,6 +54,8 @@ Custom field values can also be retrieved but for now you'll need to know the cu
 
 	{my_entry_relationship value="field_id_12"}
 
+Note: Pulling custom data will require one or more small DB calls.
+
 ### `divider='|'`
 
 The glue for the returned entry values. Default glue is a pipe.
