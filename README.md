@@ -1,5 +1,15 @@
+NSM Entry Select
+================
+
+Screenshots
+-----------
+
+[![NSM Entry Select - Publish field](http://s3.amazonaws.com/ember/v5GaN2Vzxo4cADHcgiu91rW4dtN35LUZ_s.png)](http://emberapp.com/leevigraham/images/nsm-entry-select-field-settings/ "NSM Entry Select - Publish field") [![NSM Entry Select - Field settings](http://s3.amazonaws.com/ember/AAZWSU8ATPOwHWGIlqVOSKyC3bSad5rp_s.png)](http://emberapp.com/leevigraham/images/nsm-entry-select-publish-field/ "NSM Entry Select - Field settings")
+
+
+
 Installation
-============
+------------
 
 1. Download
 2. Rename folder to `nsm_entry_select`
@@ -8,7 +18,7 @@ Installation
 5. Create a new field.
 
 Usage
-=====
+-----
 
 Let's say your custom field name is `my_entry_relationship`. In your templates you have one tag with a single optional parameter:
 
