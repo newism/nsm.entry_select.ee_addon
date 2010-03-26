@@ -12,15 +12,9 @@ Usage
 
 Let's say your custom field name is `my_entry_relationship`. In your templates you have one tag with a single optional parameter:
 
-Example 1: Outputs the selected entry id's concatenated with a "|" ie: 1|2|3 Use this in `{exp:channel:entries}` tag `entry_id` parameter.
+Example 1: Outputs the selected entry id's concatenated with a "|" ie: 1|2|3 Use this in embedded `{exp:channel:entries}` tag `entry_id` parameter.
 
-	<ul>
-		{exp:channel:entries
-			entry_id="{my_entry_relationship}"
-		}
-	    <li>{title}</li>
-		{/exp:channel:entries}
-	</ul>
+	{my_entry_relationship}
 
 Example 2: Outputs the selected entry id's concatenated with a "," ie: 1,2,3 Use this in `{exp:query}` tag `WHERE entry_id IN()` conditional.
 
