@@ -166,7 +166,7 @@ class Nsm_entry_select_ft extends EE_Fieldtype
 
 		$params = array_merge(array(
 			"divider" => "|",
-			"value" => "id",
+			"value" => "entry_id",
 			"limit" => count($entries),
 			"offset" => 0
 		), $params);
@@ -174,7 +174,7 @@ class Nsm_entry_select_ft extends EE_Fieldtype
 		$entries = array_slice($entries, $params["offset"], $params["limit"]);
 
 		// Just returning the id?
-		if($params["value"] == "id")
+		if($params["value"] == "entry_id")
 			return implode($params["divider"], $entries);
 
 		$required_entries = $entries;

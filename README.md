@@ -1,14 +1,10 @@
 NSM Entry Select - Simple entry relationships
 =============================================
 
-Store a pipe delimited list of one or more selected entry ids as custom field content. Entry selections can be restricted by channels on a per field basis.
-
 Screenshots
 -----------
 
 [![NSM Entry Select - Publish field](http://s3.amazonaws.com/ember/v5GaN2Vzxo4cADHcgiu91rW4dtN35LUZ_s.png)](http://emberapp.com/leevigraham/images/nsm-entry-select-field-settings/ "NSM Entry Select - Publish field") [![NSM Entry Select - Field settings](http://s3.amazonaws.com/ember/AAZWSU8ATPOwHWGIlqVOSKyC3bSad5rp_s.png)](http://emberapp.com/leevigraham/images/nsm-entry-select-publish-field/ "NSM Entry Select - Field settings")
-
-
 
 Installation
 ------------
@@ -22,11 +18,53 @@ Installation
 Usage
 -----
 
-Let's say your custom field name is `my_entry_relationship`. In your templates you have one tag: `{my_entry_relationship}`
+Let's say your custom field name is `my_entry_relationship_field`. In your templates you have one tag: `{my_entry_relationship_field}`
+
+By default this tag returns a pipe delimited string of the related entry ids - great to use as tag parameters.
+
+### Example: Rendering related entries using the `{exp:channel:entries}` tag and a collection embed template.
+
+This technique requires a parent templates and a "collection" embed.
+
+The parent template: `site/index`:
+
+	{!-- The entry with NSM Entry Select custom field value --}
+	{exp:channel:entries weblog="my_weblog" limit="1"}
+		<h1>Title</h1>
+		{embed="site/related_entries" related_ids="{my_entry_relationship_field}"}
+	{/exp:channel:entries}
+
+The collection embed template: `site/related_entries`:
+
+	{!--
+		Pass the related entry ids into a second weblog entries tag
+		The passed custom field value will look something like: 1|2|3
+		The tag below *will* render the related entries
+	--}
+	<h2>Related Entries</h2>
+	<ul>
+		{exp:channel:entries weblog="my_related_weblog" entry_id="{embed:related_ids}"}
+		<li>{title}</li>
+		{/exp:channel:entries}
+	</ul>
+	
+	{!--
+		You could also show all but the related entries
+		The tag below *will not* render the related entries
+	--}
+	<h2>Un-related Entries</h2>
+	<ul>
+		{exp:channel:entries weblog="my_related_weblog" entry_id="not {embed:related_ids}"}
+		<li>{title}</li>
+		{/exp:channel:entries}
+	</ul>
+
+Parameters
+----------
 
 This tag accepts the following parameters:
 
-### `value='id'`
+### `value='entry_id'`
 
 The entry value to return. By default this is the entry id but it can be any of the standard entry attributes:
 
@@ -48,11 +86,11 @@ The entry value to return. By default this is the entry id but it can be any of 
 
 Example:
 
-	{my_entry_relationship value="title"} or {my_entry_relationship value="url_title"}
+	{my_entry_relationship_field value="title"} or {my_entry_relationship_field value="url_title"}
 
 Custom field values can also be retrieved but for now you'll need to know the custom field id. Example:
 
-	{my_entry_relationship value="field_id_12"}
+	{my_entry_relationship_field value="field_id_12"}
 
 Note: Pulling custom data will require one or more small DB calls.
 
@@ -62,7 +100,7 @@ The glue for the returned entry values. Default glue is a pipe.
 
 Example 1: Outputs the selected entry id's concatenated with a "|" ie: 1|2|3 Use this in embedded `{exp:channel:entries}` tag `entry_id` parameter.
 
-	{my_entry_relationship}
+	{my_entry_relationship_field}
 
 Example 2: Outputs the selected entry id's concatenated with a "," ie: 1,2,3 Use this in `{exp:query}` tag `WHERE entry_id IN()` conditional.
 
@@ -71,7 +109,7 @@ Example 2: Outputs the selected entry id's concatenated with a "," ie: 1,2,3 Use
 	    SELECT * 
 	    FROM `exp_channel_titles`
 	    WHERE `entry_id`
-	    IN({my_entry_relationship, divider=","});
+	    IN({my_entry_relationship_field, divider=","});
 	"}
 	    <li>{title}</li>
 	{/exp:query}
