@@ -22,7 +22,41 @@ Installation
 Usage
 -----
 
-Let's say your custom field name is `my_entry_relationship`. In your templates you have one tag with a single optional parameter:
+Let's say your custom field name is `my_entry_relationship`. In your templates you have one tag: `{my_entry_relationship}`
+
+This tag accepts the following parameters:
+
+### `value='id'`
+
+The entry value to return. By default this is the entry id but it can be any of the standard entry attributes:
+
+* `entry_id`
+* `site_id`
+* `channel_id`
+* `author_id`
+* `forum_topic_id`
+* `title`
+* `url_title`
+* `status`
+* `view_count_one`
+* `view_count_two`
+* `view_count_three`
+* `view_count_four`
+* `allow_comments`
+* `sticky`
+* `comment_total`
+
+Example:
+
+	{my_entry_relationship value="title"} or {my_entry_relationship value="url_title"}
+
+Custom field values can also be retrieved but for now you'll need to know the custom field id. Example:
+
+	{my_entry_relationship value="field_id_12"}
+
+### `divider='|'`
+
+The glue for the returned entry values. Default glue is a pipe.
 
 Example 1: Outputs the selected entry id's concatenated with a "|" ie: 1|2|3 Use this in embedded `{exp:channel:entries}` tag `entry_id` parameter.
 

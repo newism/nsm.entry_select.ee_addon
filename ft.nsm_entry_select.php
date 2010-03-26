@@ -46,7 +46,11 @@ class Nsm_entry_select_ft extends EE_Fieldtype
 	public function __construct()
 	{
 		parent::EE_Fieldtype();
-	}	
+
+		// create a cache 
+		if(!isset($this->EE->session->cache[__CLASS__]))
+			$this->EE->session->cache[__CLASS__] = array();
+	}
 
 	/**
 	 * Display the settings form for each custom field
@@ -157,11 +161,52 @@ class Nsm_entry_select_ft extends EE_Fieldtype
 	 */
 	public function replace_tag($data, $params = FALSE, $tagdata = FALSE)
 	{
+
+		$entries = explode("|", $data);
+
 		$params = array_merge(array(
-			"divider" => "|"
+			"divider" => "|",
+			"value" => "id",
+			"limit" => count($entries),
+			"offset" => 0
 		), $params);
 
-		return str_replace("|", $params["divider"], $data);
+		$entries = array_slice($entries, $params["offset"], $params["limit"]);
+
+		// Just returning the id?
+		if($params["value"] == "id")
+			return implode($params["divider"], $entries);
+
+		$required_entries = $entries;
+		foreach($required_entries as $k => $v)
+		{
+			if(array_key_exists($v, $this->EE->session->cache[__CLASS__]))
+			{
+				unset($required_entries[$k]);
+			}
+		}
+
+		if(!empty($required_entries))
+		{
+			$this->EE->db->from("exp_channel_titles")
+						->join("exp_channel_data", 'exp_channel_titles.entry_id = exp_channel_data.entry_id')
+						->where_in("exp_channel_titles.entry_id", $required_entries)
+						->limit($params["limit"]);
+
+			$query = $this->EE->db->get();
+			foreach ($query->result_array() as $entry)
+			{
+				$this->EE->session->cache[__CLASS__][$entry["entry_id"]] = $entry;
+			}
+		}
+
+		$ret = array();
+		$count = 0;
+		foreach ($entries as $id){
+			$ret[] = $this->EE->session->cache[__CLASS__][$id][$params["value"]];
+		}
+
+		return implode($params["divider"], $ret);
 	}
 
 	/**
