@@ -182,8 +182,41 @@ class Nsm_entry_select_ft extends EE_Fieldtype
 		// Just returning the id?
 		if($params["value"] == "entry_id")
 			return implode($params["divider"], $entries);
+	private function _parseSingle($entries, $params)
+	{
+		$ret = array();
+		foreach ($entries as $entry_id => $entry)
+		{
+			if($params["multi_field"])
+			{
+				$entry[$params["value"]] = implode($params["multi_field_glue"], decode_multi_field($entry[$params["value"]]));
+			}
+			$ret[] = $entry[$params["value"]];
+		}
+		return implode($params["divider"], $ret);
+	}
 
-		$required_entries = $entries;
+	private function _parseMulti($entries, $params, $tagdata)
+	{
+		$chunk = '';
+		foreach($entries as $count => $entry)
+		{
+			$vars['count'] = $count + 1;
+			foreach ($entry as $key => $value)
+			{
+				$vars[$params["prefix"] . $key] = $value;
+			}
+			$tmp = $this->EE->functions->prep_conditionals($tagdata, $vars);
+			$chunk .= $this->EE->functions->var_swap($tmp, $vars);
+		}
+
+		if ($params['backspace'])
+		{
+			$chunk = substr($chunk, 0, - $params['backspace']);
+		}
+		return $chunk;
+	}
+
 		foreach($required_entries as $k => $v)
 		{
 			if(array_key_exists($v, $this->EE->session->cache[__CLASS__]))
