@@ -217,6 +217,9 @@ class Nsm_entry_select_ft extends EE_Fieldtype
 		return $chunk;
 	}
 
+	private function _getEntryData($entries, $params)
+	{
+		$required_entries = $entries; 
 		foreach($required_entries as $k => $v)
 		{
 			if(array_key_exists($v, $this->EE->session->cache[__CLASS__]))
@@ -229,8 +232,7 @@ class Nsm_entry_select_ft extends EE_Fieldtype
 		{
 			$this->EE->db->from("exp_channel_titles")
 						->join("exp_channel_data", 'exp_channel_titles.entry_id = exp_channel_data.entry_id')
-						->where_in("exp_channel_titles.entry_id", $required_entries)
-						->limit($params["limit"]);
+						->where_in("exp_channel_titles.entry_id", $required_entries);
 
 			$query = $this->EE->db->get();
 			foreach ($query->result_array() as $entry)
