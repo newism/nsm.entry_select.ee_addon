@@ -171,11 +171,13 @@ class Nsm_entry_select_ft extends EE_Fieldtype
 		$entries = decode_multi_field($data);
 
 		$params = array_merge(array(
-			"divider" => "|",
+			"backspace" => FALSE,
+			"divider" => ", ",
+			"multi_field" => FALSE,
+			"multi_field_glue" => ", ",
 			"value" => "entry_id",
-			"limit" => count($entries),
-			"offset" => 0
-		), $params);
+			"prefix" => "es:"
+		), (array) $params);
 
 		$entries = array_slice($entries, $params["offset"], $params["limit"]);
 
