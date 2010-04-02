@@ -244,12 +244,12 @@ class Nsm_entry_select_ft extends EE_Fieldtype
 		}
 
 		$ret = array();
-		$count = 0;
-		foreach ($entries as $id){
-			$ret[] = $this->EE->session->cache[__CLASS__][$id][$params["value"]];
+		foreach ($entries as $entry_id)
+		{
+			$ret[] = $this->EE->session->cache[__CLASS__][$entry_id];
 		}
+		return $ret;
 
-		return implode($params["divider"], $ret);
 	}
 
 	/**
