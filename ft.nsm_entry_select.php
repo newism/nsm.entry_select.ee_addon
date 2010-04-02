@@ -148,7 +148,8 @@ class Nsm_entry_select_ft extends EE_Fieldtype
 	 * @return string Concatenated string f entry channels
 	 */
 	public function save($data){
-		return implode("|", $data);
+		$this->EE->load->helper('custom_field');
+		return encode_multi_field($data);
 	}
 
 	/**
@@ -164,7 +165,10 @@ class Nsm_entry_select_ft extends EE_Fieldtype
 	public function replace_tag($data, $params = FALSE, $tagdata = FALSE)
 	{
 
-		$entries = explode("|", $data);
+		// print("<pre>" . print_r($params, TRUE) . "</pre>");
+
+		$this->EE->load->helper('custom_field');
+		$entries = decode_multi_field($data);
 
 		$params = array_merge(array(
 			"divider" => "|",
