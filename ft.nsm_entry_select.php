@@ -36,6 +36,8 @@ class Nsm_entry_select_ft extends EE_Fieldtype
 		'autocomplete'
 	);
 
+	var $has_array_data = TRUE;
+
 	/**
 	 * Constructor
 	 * 
