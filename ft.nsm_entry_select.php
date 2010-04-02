@@ -179,11 +179,11 @@ class Nsm_entry_select_ft extends EE_Fieldtype
 			"prefix" => "es:"
 		), (array) $params);
 
-		$entries = array_slice($entries, $params["offset"], $params["limit"]);
+		$entries = $this->_getEntryData($entries, $params);
 
-		// Just returning the id?
-		if($params["value"] == "entry_id")
-			return implode($params["divider"], $entries);
+		return ($tagdata) ? $this->_parseMulti($entries, $params, $tagdata) : $this->_parseSingle($entries, $params);
+	}
+
 	private function _parseSingle($entries, $params)
 	{
 		$ret = array();
