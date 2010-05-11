@@ -59,6 +59,19 @@ The collection embed template: `site/related_entries`:
 		{/exp:channel:entries}
 	</ul>
 
+### Full example:
+
+	{exp:channel:entries channel="parent_weblog"}
+	<p>{title}</p>
+	<ul>
+		<li>{nsm_entry_select_field}</li>
+		<li>{nsm_entry_select_field value="title"}</li>
+		<li>{nsm_entry_select_field value="field_id_33"}</li>
+		<li>{nsm_entry_select_field value="field_id_33" multi_field="yes"}</li>
+		<li>{nsm_entry_select_field value="field_id_33" multi_field="yes" multi_field_glue="*" }</li>
+	</ul>
+	{/exp:channel:entries}
+
 Parameters
 ----------
 
@@ -94,9 +107,9 @@ Custom field values can also be retrieved but for now you'll need to know the cu
 
 Note: Pulling custom data will require one or more small DB calls.
 
-### `divider='|'`
+### `glue=', '`
 
-The glue for the returned entry values. Default glue is a pipe.
+The glue for the returned entry values. Default glue is a pipe "|".
 
 Example: Output the selected entry id's concatenated with a "," ie: `1,2,3`. Use this in `{exp:query}` tag `WHERE entry_id IN()` conditional like so:
 
@@ -105,8 +118,39 @@ Example: Output the selected entry id's concatenated with a "," ie: `1,2,3`. Use
 	    SELECT * 
 	    FROM `exp_channel_titles`
 	    WHERE `entry_id`
-	    IN({my_entry_relationship_field, divider=","});
+	    IN({my_entry_relationship_field glue=","});
 	"}
 	    <li>{title}</li>
 	{/exp:query}
 	</ul>
+
+### `multi_field='yes'`
+
+Related entries may have custom fields such as multi-select and checkboxes that store selected values in a pipe delimited string. In some cases you may want to replace the pipe with a human readable value such as a comma.
+
+Example:
+
+The related entry has a multi select box with 3 possible values: apples, oranges and lemons. The field id is "20". If the related entry has apples and oranges selected the value of the custom field will be `apples|oranges`.
+
+	Outputs: apples|oranges
+	{my_entry_relationship_field value="field_id_20"}
+	
+	Outputs: apples, oranges
+	{my_entry_relationship_field value="field_id_20" multi_field="yes"}
+
+The example above assumes that there is only one related entry.
+
+### `multi_field_glue=', '`
+
+Multi-select custom fields are glued with ", " by default. The glue string can be overridden with the `multi_field_glue=''` parameter.
+
+Example:
+
+	Outputs: apples|oranges
+	{my_entry_relationship_field value="field_id_20"}
+
+	Outputs: apples, oranges
+	{my_entry_relationship_field value="field_id_20" multi_field="yes"}
+
+	Outputs: apples * oranges
+	{my_entry_relationship_field value="field_id_20" multi_field="yes" multi_field_glue=" * "}

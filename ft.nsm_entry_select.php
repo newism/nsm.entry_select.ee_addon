@@ -36,7 +36,13 @@ class Nsm_entry_select_ft extends EE_Fieldtype
 		'autocomplete'
 	);
 
-	var $has_array_data = TRUE;
+	/**
+	 * 
+	 * 
+	 * @access public
+	 * @var boolean
+	 */
+	public $has_array_data = TRUE;
 
 	/**
 	 * Constructor
@@ -51,7 +57,11 @@ class Nsm_entry_select_ft extends EE_Fieldtype
 
 		// create a cache 
 		if(!isset($this->EE->session->cache[__CLASS__]))
+		{
 			$this->EE->session->cache[__CLASS__] = array();
+			$this->EE->session->cache[__CLASS__]["entry_data"] = array();
+			$this->EE->session->cache[__CLASS__]["channel_custom_fields"] = array();
+		}
 	}
 
 	/**
@@ -141,6 +151,17 @@ class Nsm_entry_select_ft extends EE_Fieldtype
 	}
 
 	/**
+	 * Publish form validation
+	 * 
+	 * @param $data array Contains the submitted field data.
+	 * @return mixed TRUE or an error message
+	 */
+	public function validate($data)
+	{
+		return TRUE;
+	}
+
+	/**
 	 * Pre-process the data and return a string
 	 *
 	 * @access public
@@ -172,7 +193,7 @@ class Nsm_entry_select_ft extends EE_Fieldtype
 
 		$params = array_merge(array(
 			"backspace" => FALSE,
-			"divider" => ", ",
+			"glue" => ", ",
 			"multi_field" => FALSE,
 			"multi_field_glue" => ", ",
 			"value" => "entry_id",
@@ -184,23 +205,41 @@ class Nsm_entry_select_ft extends EE_Fieldtype
 		return ($tagdata) ? $this->_parseMulti($entries, $params, $tagdata) : $this->_parseSingle($entries, $params);
 	}
 
+	/**
+	 * Parse a single tag
+	 * 
+	 * @access private
+	 * @param $entries array The entry ids
+	 * @param $params array the tag params
+	 * @return string The entry ids concatenated with glue
+	 */
 	private function _parseSingle($entries, $params)
 	{
 		$ret = array();
 		foreach ($entries as $entry_id => $entry)
 		{
-			if($params["multi_field"])
+			if(self::_isTrue($params["multi_field"]))
 			{
 				$entry[$params["value"]] = implode($params["multi_field_glue"], decode_multi_field($entry[$params["value"]]));
 			}
 			$ret[] = $entry[$params["value"]];
 		}
-		return implode($params["divider"], $ret);
+		return implode($params["glue"], $ret);
 	}
 
+	/**
+	 * Parse a tag pair
+	 * 
+	 * @access private
+	 * @param $entries array The entry ids
+	 * @param $params array the tag params
+	 * @param $tagdata string The data between the tag pair
+	 * @return string The entry ids concatenated with glue
+	 */
 	private function _parseMulti($entries, $params, $tagdata)
 	{
 		$chunk = '';
+
 		foreach($entries as $count => $entry)
 		{
 			$vars['count'] = $count + 1;
@@ -219,6 +258,15 @@ class Nsm_entry_select_ft extends EE_Fieldtype
 		return $chunk;
 	}
 
+
+	/**
+	 * Get the entry data from the DB
+	 * 
+	 * @access private
+	 * @param $entries array The entry ids
+	 * @param $params array the tag params
+	 * @return array Entries with DB data
+	 */
 	private function _getEntryData($entries, $params)
 	{
 		$required_entries = $entries; 
@@ -239,28 +287,19 @@ class Nsm_entry_select_ft extends EE_Fieldtype
 			$query = $this->EE->db->get();
 			foreach ($query->result_array() as $entry)
 			{
-				$this->EE->session->cache[__CLASS__][$entry["entry_id"]] = $entry;
+				$this->EE->session->cache[__CLASS__]["entry_data"][$entry["entry_id"]] = $entry;
 			}
 		}
 
 		$ret = array();
 		foreach ($entries as $entry_id)
 		{
-			$ret[] = $this->EE->session->cache[__CLASS__][$entry_id];
+			if(!isset($this->EE->session->cache[__CLASS__]["entry_data"][$entry_id]))
+				continue;
+
+			$ret[] = $this->EE->session->cache[__CLASS__]["entry_data"][$entry_id];
 		}
 		return $ret;
-
-	}
-
-	/**
-	 * Publish form validation
-	 * 
-	 * @param $data array Contains the submitted field data.
-	 * @return mixed TRUE or an error message
-	 */
-	public function validate($data)
-	{
-		return TRUE;
 	}
 
 	/**
@@ -326,6 +365,17 @@ class Nsm_entry_select_ft extends EE_Fieldtype
 		}
 		$r .= "</select>";
 		return $r;
+	}
+
+	/**
+	 * Checks if a param value is true
+	 * 
+	 * @access private
+	 * @param $value mixed The param value
+	 * @return boolean
+	 */
+	private static function _isTrue($value){
+		return in_array($value, array("yes", "y", "1", TRUE, "true", "TRUE"));
 	}
 
 }
