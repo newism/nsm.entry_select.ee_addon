@@ -6,7 +6,7 @@
  * @package NSMEntrySelect
  * @version 0.0.1
  * @author Leevi Graham <http://newism.com.au>
- * @copyright Copyright (c) 2007-2009 Newism
+ * @copyright Copyright (c) 2007-2010 Newism
  * @license Commercial - please see LICENSE file included with this distribution
  * @see http://expressionengine.com/public_beta/docs/development/extensions.html
  *
@@ -35,14 +35,6 @@ class Nsm_entry_select_ft extends EE_Fieldtype
 		'multi_select',
 		'autocomplete'
 	);
-
-	/**
-	 * 
-	 * 
-	 * @access public
-	 * @var boolean
-	 */
-	public $has_array_data = TRUE;
 
 	/**
 	 * Constructor
