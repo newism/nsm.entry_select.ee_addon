@@ -45,7 +45,8 @@ class Nsm_entry_select_ft extends EE_Fieldtype
 	 */
 	public function __construct()
 	{
-		parent::EE_Fieldtype();
+		parent::__construct();
+		$this->EE->load->model('channel_model');
 
 		// create a cache 
 		if(!isset($this->EE->session->cache[__CLASS__]))
