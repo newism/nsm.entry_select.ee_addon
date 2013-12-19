@@ -123,7 +123,7 @@ class Nsm_entry_select_ft extends EE_Fieldtype
 	 * @param $data String Contains the current field data. Blank for new entries.
 	 * @return String The custom field HTML
 	 */
-	public function display_field($data = FALSE)
+	public function display_field($data)
 	{
 		if(!is_array($data))
 			$data = explode("|", $data);
