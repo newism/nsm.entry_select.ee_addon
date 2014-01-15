@@ -21,7 +21,7 @@ class Nsm_entry_select_ft extends EE_Fieldtype
 	 */
 	public $info = array(
 		'name'		=> 'NSM Entry Select',
-		'version'	=> '0.0.1'
+		'version'	=> '0.0.2'
 	);
 
 	/**
@@ -69,6 +69,7 @@ class Nsm_entry_select_ft extends EE_Fieldtype
 	public function display_settings($data)
 	{
 		$this->EE->lang->loadfile('nsm_entry_select');
+		$this->EE->load->model('channel_model');
 
 		$data = array_merge(array(
 			"field_channels" => array(),
