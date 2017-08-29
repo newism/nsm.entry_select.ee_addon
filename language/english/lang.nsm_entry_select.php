@@ -11,5 +11,6 @@
 $lang = array(
 	'select'=>'Select',
 	'multi_select' => 'Multi Select',
-	'autocomplete' => 'Autocomplete'
+	'autocomplete' => 'Autocomplete',
+	'text' => 'Text'
 );

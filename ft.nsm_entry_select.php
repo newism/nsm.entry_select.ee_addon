@@ -32,7 +32,8 @@ class Nsm_entry_select_ft extends EE_Fieldtype
      */
     private static $ui_modes = array(
         'select',
-        'multi_select'
+        'multi_select',
+        'text'
     );
 
     /**
@@ -162,9 +163,9 @@ class Nsm_entry_select_ft extends EE_Fieldtype
     }
 
     private function render_field($data, $fieldName) {
-        if (!is_array($data)) {
-            $data = explode("|", $data);
-        }
+
+        $this->EE->load->helper('custom_field');
+        $data = decode_multi_field($data);
 
         $options = array();
 
@@ -204,10 +205,15 @@ ORDER BY
             }
         }
 
-        if($this->settings['field_ui_mode'] === 'multi_select') {
-            $r = form_multiselect($fieldName . "[]", $options, $data);
-        } else {
-            $r = form_dropdown($fieldName, $options, $data);
+        switch($this->settings['field_ui_mode']) {
+            case 'multi_select':
+                $r = form_multiselect($fieldName . "[]", $options, $data);
+                break;
+            case 'select':
+                $r = form_dropdown($fieldName, $options, $data);
+                break;
+            case 'text':
+                $r = form_input($fieldName, implode("|", $data));
         }
 
         return $r;
